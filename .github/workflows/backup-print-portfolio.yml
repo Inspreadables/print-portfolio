@@ -36,6 +36,9 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: Ensure backups folder exists
+        run: mkdir -p backups
+
       - name: Fetch families table
         run: |
           curl -sS "${{ secrets.SUPABASE_URL }}/rest/v1/families?select=*&order=sort_order.asc" \
@@ -52,7 +55,6 @@ jobs:
 
       - name: Commit if changed
         run: |
-          mkdir -p backups
           git config user.name "portfolio-backup-bot"
           git config user.email "actions@users.noreply.github.com"
           git add backups/families.json backups/pages.json
